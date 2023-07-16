@@ -1,10 +1,18 @@
 import Head from 'next/head'
 import { increment, decrement, incrementByAmount } from '../state/slices/counterSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { firstFunction } from '../functions/functions'
+import { setUserName } from '@/state/slices/userSlice'
 
 export default function Home() {
   const dispatch = useDispatch();
   const value = useSelector((state)=>state.counterSlice.value);
+  const userName = useSelector((state)=>state.userSlice.userName);
+
+  const changeUserName = (fn, ln) => {
+    let userName = firstFunction(fn, ln);
+    dispatch(setUserName(userName));
+  };
 
   return (
     <>
@@ -15,10 +23,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-          <h1>{value}</h1>
+          <h1>{userName}</h1>
+
+          <h2>{value}</h2>
           <button onClick={()=>{dispatch(increment())}}>+1</button>
           <button onClick={()=>{dispatch(incrementByAmount(5))}}>+5</button>
           <button onClick={()=>{dispatch(decrement())}}>-1</button>
+
+          <button onClick={()=>{changeUserName('ahmed', 'abdelaziz')}}>show name</button>
       </main>
     </>
   )
